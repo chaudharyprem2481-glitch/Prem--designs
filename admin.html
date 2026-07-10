@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Portfolio Admin</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;550;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#000000; --on-primary:#ffffff;
+    --canvas-cream:#fbfbf5; --canvas-light:#ffffff;
+    --shade-30:#d4d4d8; --shade-40:#a1a1aa; --shade-50:#71717a; --shade-60:#52525b; --shade-70:#3f3f46;
+    --hairline-light:#e4e4e7;
+    --aloe-10:#c1fbd4; --pistachio-10:#d4f9e0;
+    --danger:#b3261e; --danger-bg:#fbe9e7;
+    --radius-sm:6px; --radius-md:8px; --radius-lg:12px; --radius-pill:9999px;
+    --elevation-3: 0 8px 8px rgba(0,0,0,0.1), 0 4px 4px rgba(0,0,0,0.1), 0 2px 2px rgba(0,0,0,0.1), 0 0 0 1px rgba(0,0,0,0.08);
+  }
+  *{ box-sizing:border-box; margin:0; padding:0; }
+  body{
+    font-family:'Inter', Helvetica, Arial, sans-serif;
+    font-feature-settings:"ss03" 1;
+    background:var(--canvas-cream); color:var(--ink);
+    line-height:1.5;
+    padding-bottom:120px;
+  }
+  a{ color:inherit; }
+  h1,h2,h3{ font-weight:550; }
+  .wrap{ max-width:820px; margin:0 auto; padding:0 20px; }
+
+  header{
+    display:flex; align-items:center; justify-content:space-between; gap:16px;
+    padding:20px; border-bottom:1px solid var(--hairline-light); background:rgba(251,251,245,0.9);
+    position:sticky; top:0; z-index:20; backdrop-filter:blur(8px); flex-wrap:wrap;
+  }
+  header .title{ font-size:17px; font-weight:600; }
+  header .conn{ font-size:13px; color:var(--shade-60); }
+  header .conn strong{ color:var(--ink); }
+  header .actions{ display:flex; gap:10px; align-items:center; }
+
+  main{ padding:32px 0 0; }
+  .card{
+    background:var(--canvas-light); border:1px solid var(--hairline-light); border-radius:var(--radius-lg);
+    padding:28px; margin-bottom:24px;
+  }
+  .card h2{ font-size:19px; margin-bottom:4px; }
+  .card .hint{ color:var(--shade-60); font-size:13.5px; margin-bottom:20px; }
+
+  label{ display:block; font-size:13px; font-weight:600; color:var(--shade-70); margin-bottom:6px; }
+  .field{ margin-bottom:18px; }
+  .field:last-child{ margin-bottom:0; }
+  input[type=text], input[type=password], input[type=url], input[type=email], textarea{
+    width:100%; font:inherit; font-size:15px;
+    padding:11px 14px; border:1px solid var(--hairline-light); border-radius:var(--radius-md);
+    background:var(--canvas-light); color:var(--ink);
+  }
+  input:focus, textarea:focus{ outline:2px solid var(--ink); outline-offset:1px; }
+  textarea{ resize:vertical; min-height:80px; font-family:inherit; }
+  .field .sub{ font-size:12px; color:var(--shade-50); margin-top:5px; }
+  .grid-2{ display:grid; grid-template-columns:1fr 1fr; gap:18px; }
+  @media (max-width:640px){ .grid-2{ grid-template-columns:1fr; } }
+
+  .btn{
+    display:inline-flex; align-items:center; justify-content:center; gap:8px;
+    font:inherit; font-size:14.5px; font-weight:600;
+    padding:11px 20px; border-radius:var(--radius-pill); border:1px solid transparent;
+    cursor:pointer; text-decoration:none; transition:transform .12s ease, background-color .12s ease;
+  }
+  .btn:hover{ transform:translateY(-1px); }
+  .btn:disabled{ opacity:0.55; cursor:not-allowed; transform:none; }
+  .btn--primary{ background:var(--ink); color:var(--on-primary); }
+  .btn--primary:hover{ background:var(--shade-70); }
+  .btn--outline{ background:var(--canvas-light); border-color:var(--ink); color:var(--ink); }
+  .btn--outline:hover{ background:#f2f2ee; }
+  .btn--ghost{ background:transparent; color:var(--shade-60); border-color:transparent; padding:8px 12px; }
+  .btn--ghost:hover{ color:var(--ink); background:#f2f2ee; }
+  .btn--danger{ background:var(--danger-bg); color:var(--danger); }
+  .btn--sm{ padding:7px 14px; font-size:13px; }
+
+  .helpbox{ background:var(--pistachio-10); border-radius:var(--radius-md); padding:16px 18px; font-size:13.5px; margin-top:16px; }
+  .helpbox ol{ margin:8px 0 0 18px; }
+  .helpbox li{ margin-bottom:4px; }
+  .helpbox summary{ cursor:pointer; font-weight:600; }
+
+  .status{ border-radius:var(--radius-md); padding:14px 16px; font-size:14px; margin-top:16px; display:none; }
+  .status.show{ display:block; }
+  .status.info{ background:#eef2f2; color:var(--shade-70); }
+  .status.success{ background:var(--aloe-10); color:#0b3d24; }
+  .status.error{ background:var(--danger-bg); color:var(--danger); }
+
+  .tag-preview{ display:flex; flex-wrap:wrap; gap:8px; margin-top:12px; }
+  .tag-preview span{
+    font-size:12.5px; padding:5px 12px; border-radius:var(--radius-pill);
+    background:var(--canvas-cream); border:1px solid var(--hairline-light); color:var(--shade-70);
+  }
+
+  .work-item{ border:1px solid var(--hairline-light); border-radius:var(--radius-lg); padding:20px; margin-bottom:16px; }
+  .work-item-head{ display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; }
+  .work-item-head .label{ font-weight:600; font-size:14px; color:var(--shade-70); }
+  .work-item-actions{ display:flex; gap:6px; }
+  .icon-btn{
+    width:30px; height:30px; display:inline-flex; align-items:center; justify-content:center;
+    border-radius:var(--radius-sm); border:1px solid var(--hairline-light); background:var(--canvas-light);
+    cursor:pointer; color:var(--shade-60);
+  }
+  .icon-btn:hover{ background:#f2f2ee; color:var(--ink); }
+  .icon-btn:disabled{ opacity:0.4; cursor:not-allowed; }
+
+  .image-row{ display:flex; align-items:center; gap:16px; margin-bottom:16px; }
+  .image-preview{
+    width:120px; height:68px; border-radius:var(--radius-sm); overflow:hidden;
+    background:var(--canvas-cream); border:1px solid var(--hairline-light); flex-shrink:0;
+  }
+  .image-preview.round{ width:64px; height:64px; border-radius:50%; }
+  .image-preview img{ width:100%; height:100%; object-fit:cover; display:block; }
+  .file-label{
+    display:inline-flex; align-items:center; gap:8px; font-size:13.5px; font-weight:600;
+    padding:9px 16px; border-radius:var(--radius-pill); border:1px solid var(--ink); cursor:pointer;
+  }
+  .file-label:hover{ background:#f2f2ee; }
+  .file-label input{ display:none; }
+  .file-note{ font-size:12px; color:var(--shade-50); margin-top:6px; }
+
+  #add-work-btn{ margin-top:4px; }
+
+  .save-bar{
+    position:fixed; bottom:0; left:0; right:0; background:rgba(251,251,245,0.94); backdrop-filter:blur(8px);
+    border-top:1px solid var(--hairline-light); padding:16px 20px; z-index:30;
+    display:flex; justify-content:center; gap:12px; align-items:center; flex-wrap:wrap;
+  }
+
+  .locked-note{ color:var(--shade-60); font-size:13.5px; margin-top:10px; }
+  .divider{ height:1px; background:var(--hairline-light); margin:20px 0; }
+  [hidden]{ display:none !important; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="title">Portfolio Admin</div>
+  <div class="actions">
+    <span class="conn" id="conn-indicator" hidden>Connected as <strong id="conn-repo-label"></strong></span>
+    <a href="index.html" class="btn btn--ghost btn--sm">View live site ↗</a>
+    <button class="btn btn--ghost btn--sm" id="disconnect-btn" hidden>Disconnect</button>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- ===================== CONNECT PANEL ===================== -->
+  <section class="card" id="connect-card">
+    <h2>Connect to your GitHub repository</h2>
+    <p class="hint">This is a one-time setup. Once connected, saving here commits straight to your repo and GitHub Pages rebuilds your site automatically (usually within a minute).</p>
+
+    <div class="field">
+      <label for="in-owner">GitHub username</label>
+      <input type="text" id="in-owner" placeholder="e.g. yourusername" autocomplete="off">
+    </div>
+    <div class="grid-2">
+      <div class="field">
+        <label for="in-repo">Repository name</label>
+        <input type="text" id="in-repo" placeholder="e.g. yourusername.github.io" autocomplete="off">
+      </div>
+      <div class="field">
+        <label for="in-branch">Branch</label>
+        <input type="text" id="in-branch" placeholder="main" value="main" autocomplete="off">
+      </div>
+    </div>
+    <div class="field">
+      <label for="in-token">Personal access token</label>
+      <input type="password" id="in-token" placeholder="github_pat_..." autocomplete="off">
+      <div class="sub">Stored only in this browser. Never shared with anyone but GitHub.</div>
+    </div>
+
+    <button class="btn btn--primary" id="connect-btn">Connect</button>
+    <div class="status" id="connect-status"></div>
+
+    <details class="helpbox">
+      <summary>How do I get a token? (2 minutes, one time)</summary>
+      <ol>
+        <li>On GitHub, go to <strong>Settings → Developer settings → Personal access tokens → Fine-grained tokens</strong>.</li>
+        <li>Click <strong>Generate new token</strong>. Give it any name, e.g. "Portfolio Admin".</li>
+        <li>Set an expiration (a year is fine — you'll just repeat this step when it expires).</li>
+        <li>Under <strong>Repository access</strong>, choose <strong>Only select repositories</strong> and pick your portfolio repo.</li>
+        <li>Under <strong>Permissions → Repository permissions</strong>, find <strong>Contents</strong> and set it to <strong>Read and write</strong>.</li>
+        <li>Click <strong>Generate token</strong> and copy it — GitHub only shows it once. Paste it above.</li>
+      </ol>
+    </details>
+  </section>
+
+  <!-- ===================== EDITOR (hidden until connected) ===================== -->
+  <div id="editor" hidden>
+
+    <section class="card">
+      <h2>Profile</h2>
+      <p class="hint">Your name, role, and the words visitors see first.</p>
+
+      <div class="image-row">
+        <div class="image-preview round"><img id="avatar-preview" src="assets/avatar.svg" alt="Avatar preview"></div>
+        <div>
+          <label class="file-label">
+            Upload photo
+            <input type="file" accept="image/*" id="avatar-file">
+          </label>
+          <div class="file-note">Square photos work best. Keep it under ~2MB.</div>
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <div class="field"><label for="f-name">Name</label><input type="text" id="f-name"></div>
+        <div class="field"><label for="f-role">Role / title</label><input type="text" id="f-role"></div>
+      </div>
+      <div class="field"><label for="f-tagline">Hero headline</label><input type="text" id="f-tagline"></div>
+      <div class="field"><label for="f-subline">Hero subtext</label><textarea id="f-subline" rows="2"></textarea></div>
+      <div class="field"><label for="f-bio">Short bio</label><textarea id="f-bio" rows="3"></textarea></div>
+    </section>
+
+    <section class="card">
+      <h2>Specifications</h2>
+      <p class="hint">One skill per line — these show as tags on your site.</p>
+      <div class="field">
+        <textarea id="f-specs" rows="6" placeholder="YouTube Thumbnails&#10;Photo Retouching&#10;Graphic Design"></textarea>
+      </div>
+      <div class="tag-preview" id="specs-preview"></div>
+    </section>
+
+    <section class="card">
+      <h2>Contact details</h2>
+      <p class="hint">Leave any of these blank and they simply won't show on your site.</p>
+      <div class="grid-2">
+        <div class="field">
+          <label for="f-whatsapp">WhatsApp number</label>
+          <input type="text" id="f-whatsapp" placeholder="e.g. 919876543210">
+          <div class="sub">Country code + number, digits only.</div>
+        </div>
+        <div class="field">
+          <label for="f-email">Email</label>
+          <input type="email" id="f-email" placeholder="you@gmail.com">
+        </div>
+        <div class="field">
+          <label for="f-linkedin">LinkedIn</label>
+          <input type="text" id="f-linkedin" placeholder="full profile URL or username">
+        </div>
+        <div class="field">
+          <label for="f-telegram">Telegram</label>
+          <input type="text" id="f-telegram" placeholder="username (without @)">
+        </div>
+        <div class="field">
+          <label for="f-instagram">Instagram</label>
+          <input type="text" id="f-instagram" placeholder="username (without @)">
+        </div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Work</h2>
+      <p class="hint">Add, remove, or reorder the projects shown in your gallery.</p>
+      <div id="work-list"></div>
+      <button class="btn btn--outline" id="add-work-btn">+ Add project</button>
+    </section>
+
+    <div class="status" id="save-status"></div>
+  </div>
+
+</main>
+
+<div class="save-bar" id="save-bar" hidden>
+  <button class="btn btn--outline btn--sm" id="reload-btn">Reload from GitHub</button>
+  <button class="btn btn--primary" id="save-btn">Save changes</button>
+</div>
+
+<script>
+(function(){
+  var GITHUB_API = 'https://api.github.com';
+  var STORAGE_KEY = 'portfolio_admin_config_v1';
+
+  var state = { owner:'', repo:'', branch:'main', token:'', data:null };
+
+  var $ = function(id){ return document.getElementById(id); };
+
+  // ---------------- helpers ----------------
+  function authHeaders(extra){
+    var h = { 'Authorization':'Bearer ' + state.token, 'Accept':'application/vnd.github+json' };
+    if(extra) for(var k in extra) h[k] = extra[k];
+    return h;
+  }
+
+  function utf8ToBase64(str){
+    return btoa(unescape(encodeURIComponent(str)));
+  }
+  function base64ToUtf8(b64){
+    var binary = atob(b64.replace(/\n/g,''));
+    var bytes = new Uint8Array(binary.length);
+    for(var i=0;i<binary.length;i++) bytes[i] = binary.charCodeAt(i);
+    return new TextDecoder('utf-8').decode(bytes);
+  }
+  function fileToBase64(file){
+    return new Promise(function(resolve, reject){
+      var reader = new FileReader();
+      reader.onload = function(){
+        var result = reader.result;
+        var idx = result.indexOf(',');
+        resolve(result.slice(idx+1));
+      };
+      reader.onerror = function(){ reject(reader.error); };
+      reader.readAsDataURL(file);
+    });
+  }
+  function extFromFile(file){
+    var map = { 'image/jpeg':'jpg', 'image/png':'png', 'image/webp':'webp', 'image/gif':'gif', 'image/svg+xml':'svg' };
+    if(map[file.type]) return map[file.type];
+    var m = /\.([a-zA-Z0-9]+)$/.exec(file.name || '');
+    return m ? m[1].toLowerCase() : 'jpg';
+  }
+  function uid(){ return 'w' + Date.now().toString(36) + Math.random().toString(36).slice(2,7); }
+
+  async function ghErrorFromResponse(res){
+    var msg = res.status + ' ' + res.statusText;
+    try{ var j = await res.json(); if(j && j.message) msg += ' — ' + j.message; } catch(e){}
+    return new Error(msg);
+  }
+
+  async function ghGetRepo(){
+    var res = await fetch(GITHUB_API + '/repos/' + encodeURIComponent(state.owner) + '/' + encodeURIComponent(state.repo), {
+      headers: authHeaders()
+    });
+    if(!res.ok) throw await ghErrorFromResponse(res);
+    return res.json();
+  }
+
+  async function ghGetFile(path){
+    var url = GITHUB_API + '/repos/' + encodeURIComponent(state.owner) + '/' + encodeURIComponent(state.repo) +
+      '/contents/' + path + '?ref=' + encodeURIComponent(state.branch);
+    var res = await fetch(url, { headers: authHeaders() });
+    if(res.status === 404) return null;
+    if(!res.ok) throw await ghErrorFromResponse(res);
+    return res.json();
+  }
+
+  async function ghPutFile(path, base64Content, message, existingSha){
+    var body = { message: message, content: base64Content, branch: state.branch };
+    if(existingSha) body.sha = existingSha;
+    var res = await fetch(GITHUB_API + '/repos/' + encodeURIComponent(state.owner) + '/' + encodeURIComponent(state.repo) + '/contents/' + path, {
+      method:'PUT',
+      headers: authHeaders({ 'Content-Type':'application/json' }),
+      body: JSON.stringify(body)
+    });
+    if(!res.ok) throw await ghErrorFromResponse(res);
+    return res.json();
+  }
+
+  function setStatus(el, kind, msg){
+    el.className = 'status show ' + kind;
+    el.textContent = msg;
+  }
+  function clearStatus(el){
+    el.className = 'status';
+    el.textContent = '';
+  }
+
+  // ---------------- connect flow ----------------
+  function loadStoredConfig(){
+    try{
+      var raw = localStorage.getItem(STORAGE_KEY);
+      if(!raw) return null;
+      return JSON.parse(raw);
+    } catch(e){ return null; }
+  }
+  function storeConfig(cfg){
+    try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(cfg)); } catch(e){}
+  }
+  function clearStoredConfig(){
+    try{ localStorage.removeItem(STORAGE_KEY); } catch(e){}
+  }
+
+  async function connect(owner, repo, branch, token){
+    var statusEl = $('connect-status');
+    setStatus(statusEl, 'info', 'Connecting…');
+    state.owner = owner.trim();
+    state.repo = repo.trim().replace(/^\/+|\/+$/g,'');
+    state.branch = (branch || 'main').trim() || 'main';
+    state.token = token.trim();
+
+    try{
+      await ghGetRepo();
+    } catch(err){
+      var msg = err.message || String(err);
+      if(msg.indexOf('401') === 0){
+        setStatus(statusEl, 'error', "GitHub rejected the token. Double-check you copied the whole thing.");
+      } else if(msg.indexOf('403') === 0){
+        setStatus(statusEl, 'error', "This token doesn't have access to that repository. Check it's scoped to this repo with Contents: Read and write.");
+      } else if(msg.indexOf('404') === 0){
+        setStatus(statusEl, 'error', "Couldn't find that repository. Check the username and repo name for typos (and that the token can see it if it's private).");
+      } else {
+        setStatus(statusEl, 'error', 'Could not connect: ' + msg);
+      }
+      return;
+    }
+
+    var existing = null;
+    try{
+      existing = await ghGetFile('data.json');
+    } catch(err){
+      setStatus(statusEl, 'error', 'Connected, but could not read data.json: ' + err.message);
+      return;
+    }
+
+    if(existing){
+      try{
+        state.data = JSON.parse(base64ToUtf8(existing.content));
+      } catch(e){
+        setStatus(statusEl, 'error', 'Connected, but data.json on GitHub is not valid JSON. Fix it manually first.');
+        return;
+      }
+    } else {
+      state.data = JSON.parse(JSON.stringify(DEFAULT_DATA));
+    }
+
+    storeConfig({ owner:state.owner, repo:state.repo, branch:state.branch, token:state.token });
+    clearStatus(statusEl);
+    enterEditor();
+  }
+
+  // ---------------- default content (mirrors data.json seed) ----------------
+  var DEFAULT_DATA = {
+    profile:{
+      name:"Your Name", role:"Thumbnail Designer · Graphic Designer",
+      tagline:"Every frame graded, framed, and built to get the click.",
+      subline:"I design YouTube thumbnails, graphics, and colour-graded visuals for creators and brands who want their work to stop the scroll.",
+      bio:"Add a short bio here.",
+      specifications:["YouTube Thumbnails","Photo Retouching","Graphic Design","Colour Grading"],
+      avatar:"assets/avatar.svg"
+    },
+    contact:{ whatsapp:"", linkedin:"", email:"", telegram:"", instagram:"" },
+    work:[]
+  };
+
+  // ---------------- editor rendering ----------------
+  function enterEditor(){
+    $('connect-card').hidden = true;
+    $('editor').hidden = false;
+    $('save-bar').hidden = false;
+    $('conn-indicator').hidden = false;
+    $('conn-repo-label').textContent = state.owner + '/' + state.repo;
+    $('disconnect-btn').hidden = false;
+    populateForm(state.data);
+  }
+
+  function populateForm(data){
+    var p = data.profile || {};
+    $('f-name').value = p.name || '';
+    $('f-role').value = p.role || '';
+    $('f-tagline').value = p.tagline || '';
+    $('f-subline').value = p.subline || '';
+    $('f-bio').value = p.bio || '';
+    $('f-specs').value = (p.specifications || []).join('\n');
+    renderSpecsPreview();
+
+    $('avatar-preview').innerHTML = '<img id="avatar-preview-img" src="' + escapeHtml(p.avatar || 'assets/avatar.svg') + '" alt="Avatar preview" onerror="this.style.opacity=0.3">';
+
+    var c = data.contact || {};
+    $('f-whatsapp').value = c.whatsapp || '';
+    $('f-email').value = c.email || '';
+    $('f-linkedin').value = c.linkedin || '';
+    $('f-telegram').value = c.telegram || '';
+    $('f-instagram').value = c.instagram || '';
+
+    renderWorkList(data.work || []);
+  }
+
+  function renderSpecsPreview(){
+    var lines = $('f-specs').value.split('\n').map(function(s){ return s.trim(); }).filter(Boolean);
+    $('specs-preview').innerHTML = lines.map(function(s){ return '<span>' + escapeHtml(s) + '</span>'; }).join('');
+  }
+  document.addEventListener('input', function(e){
+    if(e.target && e.target.id === 'f-specs') renderSpecsPreview();
+  });
+
+  function escapeHtml(str){
+    return String(str == null ? '' : str).replace(/[&<>"']/g, function(m){
+      return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m];
+    });
+  }
+
+  function renderWorkList(items){
+    var wrap = $('work-list');
+    wrap.innerHTML = '';
+    items.forEach(function(item, index){
+      wrap.appendChild(buildWorkItemEl(item, index, items.length));
+    });
+  }
+
+  function buildWorkItemEl(item, index, total){
+    var el = document.createElement('div');
+    el.className = 'work-item';
+    el.dataset.id = item.id;
+    el.innerHTML =
+      '<div class="work-item-head">' +
+        '<span class="label">Project ' + (index+1) + '</span>' +
+        '<div class="work-item-actions">' +
+          '<button type="button" class="icon-btn" data-action="up" ' + (index===0?'disabled':'') + ' title="Move up">↑</button>' +
+          '<button type="button" class="icon-btn" data-action="down" ' + (index===total-1?'disabled':'') + ' title="Move down">↓</button>' +
+          '<button type="button" class="icon-btn" data-action="remove" title="Remove">✕</button>' +
+        '</div>' +
+      '</div>' +
+      '<div class="image-row">' +
+        '<div class="image-preview"><img data-role="preview" src="' + escapeHtml(item._previewUrl || item.image || '') + '" alt="" onerror="this.style.opacity=0.2"></div>' +
+        '<div>' +
+          '<label class="file-label">Upload image<input type="file" accept="image/*" data-role="file"></label>' +
+          '<div class="file-note">16:9 works best. Keep it under ~2MB.</div>' +
+        '</div>' +
+      '</div>' +
+      '<div class="grid-2">' +
+        '<div class="field"><label>Title</label><input type="text" data-role="title" value="' + escapeHtml(item.title||'') + '"></div>' +
+        '<div class="field"><label>Category</label><input type="text" data-role="category" value="' + escapeHtml(item.category||'') + '"></div>' +
+      '</div>' +
+      '<div class="field"><label>Description</label><textarea rows="2" data-role="description">' + escapeHtml(item.description||'') + '</textarea></div>' +
+      '<div class="field"><label>Link (optional)</label><input type="text" data-role="link" value="' + escapeHtml(item.link||'') + '" placeholder="https://..."></div>';
+
+    el.querySelector('[data-action="up"]').addEventListener('click', function(){ moveWorkItem(item.id, -1); });
+    el.querySelector('[data-action="down"]').addEventListener('click', function(){ moveWorkItem(item.id, 1); });
+    el.querySelector('[data-action="remove"]').addEventListener('click', function(){ removeWorkItem(item.id); });
+    el.querySelector('[data-role="file"]').addEventListener('change', function(e){
+      var file = e.target.files[0];
+      if(!file) return;
+      item._pendingFile = file;
+      item._previewUrl = URL.createObjectURL(file);
+      el.querySelector('[data-role="preview"]').src = item._previewUrl;
+    });
+    return el;
+  }
+
+  function collectWorkFromDom(){
+    var items = [];
+    document.querySelectorAll('#work-list .work-item').forEach(function(el){
+      var id = el.dataset.id;
+      var original = (state.data.work || []).find(function(w){ return w.id === id; }) || {};
+      items.push({
+        id: id,
+        title: el.querySelector('[data-role="title"]').value.trim(),
+        category: el.querySelector('[data-role="category"]').value.trim(),
+        description: el.querySelector('[data-role="description"]').value.trim(),
+        link: el.querySelector('[data-role="link"]').value.trim(),
+        image: original.image || '',
+        _pendingFile: original._pendingFile || null,
+        _previewUrl: original._previewUrl || null
+      });
+    });
+    return items;
+  }
+
+  function moveWorkItem(id, dir){
+    var items = collectWorkFromDom();
+    var idx = items.findIndex(function(w){ return w.id === id; });
+    var newIdx = idx + dir;
+    if(newIdx < 0 || newIdx >= items.length) return;
+    var tmp = items[idx]; items[idx] = items[newIdx]; items[newIdx] = tmp;
+    state.data.work = items;
+    renderWorkList(items);
+  }
+
+  function removeWorkItem(id){
+    if(!confirm('Remove this project? This only takes effect after you press Save changes.')) return;
+    var items = collectWorkFromDom().filter(function(w){ return w.id !== id; });
+    state.data.work = items;
+    renderWorkList(items);
+  }
+
+  $('add-work-btn').addEventListener('click', function(){
+    state.data.work = collectWorkFromDom();
+    state.data.work.push({ id: uid(), title:'New project', category:'', description:'', image:'assets/work/placeholder-1.svg', link:'' });
+    renderWorkList(state.data.work);
+  });
+
+  // ---------------- save ----------------
+  async function saveAll(){
+    var statusEl = $('save-status');
+    var saveBtn = $('save-btn');
+    saveBtn.disabled = true;
+    setStatus(statusEl, 'info', 'Saving…');
+
+    try{
+      var profile = {
+        name: $('f-name').value.trim() || 'Your Name',
+        role: $('f-role').value.trim(),
+        tagline: $('f-tagline').value.trim(),
+        subline: $('f-subline').value.trim(),
+        bio: $('f-bio').value.trim(),
+        specifications: $('f-specs').value.split('\n').map(function(s){ return s.trim(); }).filter(Boolean),
+        avatar: (state.data.profile && state.data.profile.avatar) || 'assets/avatar.svg'
+      };
+      var contact = {
+        whatsapp: $('f-whatsapp').value.trim(),
+        email: $('f-email').value.trim(),
+        linkedin: $('f-linkedin').value.trim(),
+        telegram: $('f-telegram').value.trim(),
+        instagram: $('f-instagram').value.trim()
+      };
+      var work = collectWorkFromDom();
+
+      var avatarFile = $('avatar-file').files[0];
+      if(avatarFile){
+        setStatus(statusEl, 'info', 'Uploading avatar…');
+        var apath = 'assets/avatar.' + extFromFile(avatarFile);
+        var ab64 = await fileToBase64(avatarFile);
+        var aexisting = await ghGetFile(apath);
+        await ghPutFile(apath, ab64, 'Update avatar', aexisting && aexisting.sha);
+        profile.avatar = apath;
+      }
+
+      for(var i=0;i<work.length;i++){
+        var item = work[i];
+        if(item._pendingFile){
+          setStatus(statusEl, 'info', 'Uploading image ' + (i+1) + ' of ' + work.length + '…');
+          var wpath = 'assets/work/' + item.id + '.' + extFromFile(item._pendingFile);
+          var wb64 = await fileToBase64(item._pendingFile);
+          var wexisting = await ghGetFile(wpath);
+          await ghPutFile(wpath, wb64, 'Update work image: ' + (item.title || item.id), wexisting && wexisting.sha);
+          item.image = wpath;
+        }
+        delete item._pendingFile;
+      }
+
+      setStatus(statusEl, 'info', 'Saving data.json…');
+      var payload = { profile: profile, contact: contact, work: work };
+      var jsonStr = JSON.stringify(payload, null, 2);
+      var existingData = await ghGetFile('data.json');
+      await ghPutFile('data.json', utf8ToBase64(jsonStr), 'Update portfolio content', existingData && existingData.sha);
+
+      state.data = payload;
+      $('avatar-file').value = '';
+      populateForm(state.data);
+      setStatus(statusEl, 'success', 'Saved! Your site will update in about a minute. Refresh the live site after that to see it.');
+    } catch(err){
+      setStatus(statusEl, 'error', 'Could not save: ' + (err.message || err));
+    } finally {
+      saveBtn.disabled = false;
+    }
+  }
+
+  // ---------------- wire up ----------------
+  $('avatar-file').addEventListener('change', function(e){
+    var file = e.target.files[0];
+    if(!file) return;
+    var url = URL.createObjectURL(file);
+    $('avatar-preview').innerHTML = '<img src="' + url + '" alt="Avatar preview">';
+  });
+
+  $('connect-btn').addEventListener('click', function(){
+    connect($('in-owner').value, $('in-repo').value, $('in-branch').value, $('in-token').value);
+  });
+
+  $('disconnect-btn').addEventListener('click', function(){
+    if(!confirm('Disconnect and forget this token on this device?')) return;
+    clearStoredConfig();
+    location.reload();
+  });
+
+  $('reload-btn').addEventListener('click', async function(){
+    if(!confirm('Reload from GitHub? Any unsaved changes here will be lost.')) return;
+    try{
+      var existing = await ghGetFile('data.json');
+      state.data = existing ? JSON.parse(base64ToUtf8(existing.content)) : JSON.parse(JSON.stringify(DEFAULT_DATA));
+      populateForm(state.data);
+      var statusEl = $('save-status');
+      setStatus(statusEl, 'success', 'Reloaded latest content from GitHub.');
+    } catch(err){
+      setStatus($('save-status'), 'error', 'Could not reload: ' + err.message);
+    }
+  });
+
+  $('save-btn').addEventListener('click', saveAll);
+
+  // ---------------- auto-reconnect on load ----------------
+  (function init(){
+    var cfg = loadStoredConfig();
+    if(cfg && cfg.owner && cfg.repo && cfg.token){
+      $('in-owner').value = cfg.owner;
+      $('in-repo').value = cfg.repo;
+      $('in-branch').value = cfg.branch || 'main';
+      $('in-token').value = cfg.token;
+      connect(cfg.owner, cfg.repo, cfg.branch, cfg.token);
+    }
+  })();
+})();
+</script>
+</body>
+</html>

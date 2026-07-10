@@ -1,0 +1,51 @@
+{
+  "profile": {
+    "name": "Your Name",
+    "role": "Thumbnail Designer · Graphic Designer",
+    "tagline": "Every frame graded, framed, and built to get the click.",
+    "subline": "I design YouTube thumbnails, graphics, and colour-graded visuals for creators and brands who want their work to stop the scroll.",
+    "bio": "Add a short bio here — how long you've been designing, the tools you use, and the kind of clients or channels you like working with most.",
+    "specifications": [
+      "YouTube Thumbnails",
+      "Photo Retouching",
+      "Graphic Design",
+      "Colour Grading",
+      "Social Media Creatives",
+      "Branding & Logos"
+    ],
+    "avatar": "assets/avatar.svg"
+  },
+  "contact": {
+    "whatsapp": "",
+    "linkedin": "",
+    "email": "",
+    "telegram": "",
+    "instagram": ""
+  },
+  "work": [
+    {
+      "id": "w1",
+      "title": "Add your first project",
+      "category": "Thumbnail",
+      "description": "Open admin.html and replace this with a real thumbnail or design you've shipped.",
+      "image": "assets/work/placeholder-1.svg",
+      "link": ""
+    },
+    {
+      "id": "w2",
+      "title": "Add your second project",
+      "category": "Graphic Design",
+      "description": "Upload an image, give it a title, and pick a category.",
+      "image": "assets/work/placeholder-2.svg",
+      "link": ""
+    },
+    {
+      "id": "w3",
+      "title": "Add your third project",
+      "category": "Colour Grading",
+      "description": "Your gallery can hold as many projects as you like — just keep adding.",
+      "image": "assets/work/placeholder-3.svg",
+      "link": ""
+    }
+  ]
+}

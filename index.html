@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Portfolio</title>
+<meta name="description" content="Thumbnail design, graphic design, and colour grading portfolio.">
+<meta property="og:title" content="Portfolio — Thumbnail & Graphic Designer">
+<meta property="og:description" content="Thumbnail design, graphic design, and colour grading portfolio.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;550;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#000000; --on-primary:#ffffff;
+    --canvas-night:#000000; --canvas-night-elevated:#0a0a0a;
+    --canvas-cream:#fbfbf5; --canvas-light:#ffffff;
+    --shade-30:#d4d4d8; --shade-40:#a1a1aa; --shade-50:#71717a; --shade-60:#52525b; --shade-70:#3f3f46;
+    --hairline-light:#e4e4e7; --hairline-dark:#1e2c31;
+    --aloe-10:#c1fbd4; --pistachio-10:#d4f9e0;
+    --link-mint:#99b3ad; --link-cool-2:#9797a2;
+    --radius-xs:4px; --radius-sm:5px; --radius-md:8px; --radius-lg:12px; --radius-xl:20px; --radius-pill:9999px;
+    --sp-xs:4px; --sp-sm:8px; --sp-md:12px; --sp-lg:16px; --sp-xl:24px; --sp-xxl:32px; --sp-huge:64px;
+    --elevation-1: 0 1px 2px rgba(255,255,255,0.05), inset 0 1px 0 rgba(255,255,255,0.04);
+    --elevation-3: 0 8px 8px rgba(0,0,0,0.1), 0 4px 4px rgba(0,0,0,0.1), 0 2px 2px rgba(0,0,0,0.1), 0 0 0 1px rgba(0,0,0,0.1);
+  }
+  *{ box-sizing:border-box; margin:0; padding:0; }
+  html{ scroll-behavior:smooth; }
+  body{
+    font-family:'Inter', Helvetica, Arial, sans-serif;
+    font-feature-settings:"ss03" 1;
+    background:var(--canvas-night);
+    color:var(--on-primary);
+  }
+  img{ max-width:100%; display:block; }
+  a{ color:inherit; }
+  ul{ list-style:none; }
+  .visually-hidden{ position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; }
+
+  /* focus visibility per canvas polarity */
+  .dark-track :focus-visible, nav:not(.light) :focus-visible{ outline:2px solid #fff; outline-offset:3px; border-radius:4px; }
+  .light-track :focus-visible, nav.light :focus-visible{ outline:2px solid #000; outline-offset:3px; border-radius:4px; }
+
+  /* ---------- shared type ---------- */
+  .eyebrow{
+    font-size:12px; font-weight:500; letter-spacing:0.72px; text-transform:uppercase;
+    color:var(--link-mint); display:block; margin-bottom:var(--sp-md);
+  }
+  .light-track .eyebrow{ color:var(--shade-60); }
+  .heading{
+    font-weight:330; line-height:1.14; letter-spacing:0;
+    font-size:clamp(28px, 4vw, 44px);
+  }
+  .display{
+    font-weight:330; line-height:1.05;
+    font-size:clamp(48px, 6.4vw, 88px);
+  }
+  .body-lg{ font-size:18px; font-weight:400; line-height:1.56; }
+  .body-md{ font-size:16px; font-weight:400; line-height:1.5; }
+  .caption{ font-size:14px; font-weight:500; line-height:1.49; letter-spacing:0.28px; }
+
+  /* ---------- buttons (always pill) ---------- */
+  .btn{
+    display:inline-flex; align-items:center; justify-content:center; gap:8px;
+    font-size:16px; font-weight:550; letter-spacing:0;
+    padding:12px 24px; border-radius:var(--radius-pill);
+    border:none; cursor:pointer; text-decoration:none;
+    transition:transform .15s ease, background-color .15s ease, border-color .15s ease;
+    min-height:44px;
+  }
+  .btn:hover{ transform:translateY(-1px); }
+  .btn--outline-dark{ background:transparent; border:2px solid var(--on-primary); color:var(--on-primary); }
+  .btn--outline-dark:hover{ background:rgba(255,255,255,0.08); }
+  .btn--solid-light{ background:var(--ink); color:var(--on-primary); border:2px solid var(--ink); }
+  .btn--solid-light:hover{ background:var(--shade-70); border-color:var(--shade-70); }
+  .btn--outline-light{ background:var(--canvas-light); border:1px solid var(--ink); color:var(--ink); }
+  .btn--outline-light:hover{ background:#f2f2ee; }
+  .btn--aloe{ background:var(--aloe-10); border:2px solid var(--aloe-10); color:var(--ink); }
+  .btn--aloe:hover{ filter:brightness(0.97); }
+  .link-arrow{ display:inline-flex; align-items:center; gap:6px; font-weight:550; text-decoration:underline; text-underline-offset:3px; color:var(--on-primary); }
+
+  /* ---------- tags ---------- */
+  .tag-dark{
+    display:inline-flex; align-items:center; font-size:13px; font-weight:500; letter-spacing:0.28px;
+    padding:6px 14px; border-radius:var(--radius-pill);
+    border:1px solid rgba(255,255,255,0.16); color:var(--shade-30); background:rgba(255,255,255,0.02);
+  }
+  .tag-dark.small{ font-size:11px; padding:4px 10px; color:var(--on-primary); border-color:rgba(255,255,255,0.3); }
+
+  /* ---------- NAV ---------- */
+  nav{
+    position:sticky; top:0; z-index:50;
+    display:flex; align-items:center; justify-content:space-between;
+    padding:var(--sp-lg) var(--sp-xl);
+    background:rgba(0,0,0,0.82); backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--hairline-dark);
+    transition:background-color .25s ease, border-color .25s ease;
+  }
+  nav.light{ background:rgba(251,251,245,0.86); border-bottom:1px solid var(--hairline-light); }
+  .nav-logo{ font-size:18px; font-weight:550; letter-spacing:0.3px; color:var(--on-primary); text-decoration:none; }
+  nav.light .nav-logo{ color:var(--ink); }
+  .nav-links{ display:flex; align-items:center; gap:var(--sp-xl); }
+  .nav-links a{ font-size:14px; font-weight:500; text-decoration:none; color:var(--shade-30); }
+  nav.light .nav-links a{ color:var(--shade-60); }
+  .nav-links a:hover{ color:var(--on-primary); }
+  nav.light .nav-links a:hover{ color:var(--ink); }
+  .nav-right{ display:flex; align-items:center; gap:var(--sp-lg); }
+  .nav-cta{ padding:10px 20px; font-size:14px; }
+  .nav-toggle{ display:none; background:none; border:none; color:var(--on-primary); cursor:pointer; padding:6px; }
+  nav.light .nav-toggle{ color:var(--ink); }
+  .nav-drawer{ display:none; }
+
+  @media (max-width:768px){
+    .nav-links{ display:none; }
+    .nav-toggle{ display:inline-flex; }
+    nav{ flex-wrap:wrap; }
+    .nav-drawer.open{
+      display:flex; flex-direction:column; gap:var(--sp-md);
+      width:100%; margin-top:var(--sp-lg); padding-top:var(--sp-lg);
+      border-top:1px solid var(--hairline-dark);
+    }
+    nav.light .nav-drawer.open{ border-top:1px solid var(--hairline-light); }
+    .nav-drawer a{ color:var(--shade-30); text-decoration:none; font-size:15px; }
+    nav.light .nav-drawer a{ color:var(--shade-60); }
+  }
+
+  /* ---------- HERO ---------- */
+  .hero{
+    display:grid; grid-template-columns:1.05fr 0.95fr; align-items:center; gap:var(--sp-huge);
+    padding:96px var(--sp-xl) var(--sp-huge);
+    min-height:640px;
+  }
+  .hero-copy p.body-lg{ color:var(--shade-30); max-width:480px; margin-top:var(--sp-lg); }
+  .hero-ctas{ display:flex; align-items:center; gap:var(--sp-xl); margin-top:var(--sp-xxl); flex-wrap:wrap; }
+  .hero-visual{
+    position:relative; height:460px; border-radius:var(--radius-xl);
+    background:radial-gradient(circle at 60% 40%, rgba(255,255,255,0.06), transparent 60%);
+    overflow:hidden;
+  }
+  .hero-visual canvas{ position:absolute; inset:0; width:100% !important; height:100% !important; }
+  @media (max-width:980px){
+    .hero{ grid-template-columns:1fr; padding-top:64px; gap:var(--sp-xl); }
+    .hero-visual{ display:none; }
+  }
+
+  /* ---------- MARQUEE ---------- */
+  .marquee{
+    background:var(--canvas-night-elevated); border-top:1px solid var(--hairline-dark); border-bottom:1px solid var(--hairline-dark);
+    padding:var(--sp-lg) 0; overflow:hidden; white-space:nowrap;
+  }
+  .marquee-track{ display:inline-block; padding-left:100%; animation:scroll 32s linear infinite; }
+  .marquee-track span{ font-size:14px; font-weight:500; letter-spacing:0.28px; color:var(--link-cool-2); margin:0 var(--sp-xl); }
+  .marquee-track span.dot{ color:var(--shade-70); }
+  @keyframes scroll{ from{ transform:translateX(0); } to{ transform:translateX(-100%); } }
+  @media (prefers-reduced-motion:reduce){ .marquee-track{ animation:none; padding-left:0; } }
+
+  /* ---------- SECTION SHARED ---------- */
+  section{ padding:var(--sp-huge) var(--sp-xl); }
+  .section-head{ max-width:640px; margin-bottom:var(--sp-huge); }
+  .section-head p{ color:var(--shade-30); margin-top:var(--sp-md); }
+  .light-track .section-head p{ color:var(--shade-60); }
+
+  /* ---------- ABOUT ---------- */
+  .about-panel{
+    background:var(--canvas-night-elevated); border-radius:var(--radius-lg);
+    box-shadow:var(--elevation-1);
+    padding:var(--sp-xxl); display:grid; grid-template-columns:auto 1fr; gap:var(--sp-xxl); align-items:start;
+  }
+  .about-avatar{ width:140px; height:140px; border-radius:var(--radius-xl); overflow:hidden; background:var(--canvas-night); }
+  .about-avatar img{ width:100%; height:100%; object-fit:cover; }
+  .about-name{ font-size:24px; font-weight:500; }
+  .about-role{ color:var(--shade-40); margin-top:2px; font-size:15px; }
+  .about-bio{ color:var(--shade-30); margin-top:var(--sp-lg); max-width:640px; }
+  .about-tags{ display:flex; flex-wrap:wrap; gap:var(--sp-sm); margin-top:var(--sp-xl); }
+  @media (max-width:640px){
+    .about-panel{ grid-template-columns:1fr; text-align:left; padding:var(--sp-xl); }
+    .about-avatar{ width:96px; height:96px; }
+  }
+
+  /* ---------- WORK ---------- */
+  .work-grid{ display:grid; grid-template-columns:repeat(3, 1fr); gap:var(--sp-xl); }
+  @media (max-width:980px){ .work-grid{ grid-template-columns:repeat(2,1fr); } }
+  @media (max-width:640px){ .work-grid{ grid-template-columns:1fr; } }
+  .work-card{
+    display:block; text-decoration:none; color:inherit;
+    border-radius:var(--radius-xl); overflow:hidden; background:var(--canvas-night-elevated);
+    box-shadow:var(--elevation-1);
+  }
+  .work-media{ aspect-ratio:16/9; overflow:hidden; background:#050505; }
+  .work-media img{ width:100%; height:100%; object-fit:cover; }
+  .work-caption{ padding:var(--sp-lg) var(--sp-xl) var(--sp-xl); }
+  .work-caption h3{ font-size:19px; font-weight:500; margin:var(--sp-sm) 0 6px; }
+  .work-caption p{ color:var(--shade-40); font-size:14px; line-height:1.5; }
+  .empty-state{
+    grid-column:1 / -1; border:1px dashed var(--hairline-dark); border-radius:var(--radius-lg);
+    padding:var(--sp-huge) var(--sp-xl); text-align:center; color:var(--shade-40);
+  }
+  .empty-state code{ color:var(--shade-30); }
+
+  /* ---------- CONTACT (light track) ---------- */
+  .light-track{ background:var(--canvas-cream); color:var(--ink); }
+  .light-track .heading{ color:var(--ink); }
+  .contact-featured{
+    background:var(--pistachio-10); border-radius:var(--radius-lg); padding:var(--sp-xxl);
+    box-shadow:var(--elevation-3);
+    display:flex; align-items:center; justify-content:space-between; gap:var(--sp-xl); flex-wrap:wrap;
+    margin-bottom:var(--sp-xl);
+  }
+  .contact-featured .cf-label{ font-size:13px; font-weight:600; letter-spacing:0.4px; text-transform:uppercase; color:var(--shade-70); }
+  .contact-featured .cf-value{ font-size:20px; font-weight:500; margin-top:4px; }
+  .contact-row{ display:flex; flex-wrap:wrap; gap:var(--sp-md); }
+  .empty-state-light{ color:var(--shade-60); }
+
+  /* ---------- FOOTER ---------- */
+  footer{
+    display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:var(--sp-md);
+    padding:var(--sp-xl); border-top:1px solid var(--hairline-light);
+    font-size:13px; color:var(--shade-60);
+  }
+  footer .footer-social{ display:flex; gap:var(--sp-lg); }
+  footer .footer-social a{ text-decoration:none; color:var(--shade-60); font-weight:500; }
+  footer .footer-social a:hover{ color:var(--ink); }
+</style>
+</head>
+<body>
+
+<nav id="site-nav">
+  <a href="#" class="nav-logo" data-field="name">Portfolio</a>
+  <div class="nav-links">
+    <a href="#work">Work</a>
+    <a href="#about">About</a>
+    <a href="#contact">Contact</a>
+  </div>
+  <div class="nav-right">
+    <a href="#contact" class="btn btn--outline-dark nav-cta" id="nav-cta">Let's talk</a>
+    <button class="nav-toggle" id="nav-toggle" aria-label="Toggle menu" aria-expanded="false">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+    </button>
+  </div>
+  <div class="nav-drawer" id="nav-drawer">
+    <a href="#work">Work</a>
+    <a href="#about">About</a>
+    <a href="#contact">Contact</a>
+  </div>
+</nav>
+
+<section class="hero dark-track">
+  <div class="hero-copy">
+    <span class="eyebrow" data-field="role">Thumbnail Designer · Graphic Designer</span>
+    <h1 class="display" data-field="tagline">Every frame graded, framed, and built to get the click.</h1>
+    <p class="body-lg" data-field="subline">I design YouTube thumbnails, graphics, and colour-graded visuals for creators and brands who want their work to stop the scroll.</p>
+    <div class="hero-ctas">
+      <a href="#work" class="btn btn--outline-dark">View my work</a>
+      <a href="#contact" class="link-arrow">Get in touch →</a>
+    </div>
+  </div>
+  <div class="hero-visual" id="particle-stage" aria-hidden="true"></div>
+</section>
+
+<div class="marquee dark-track">
+  <div class="marquee-track" id="marquee-track"></div>
+</div>
+
+<section class="about dark-track" id="about">
+  <div class="section-head">
+    <span class="eyebrow">About</span>
+    <h2 class="heading">What I do</h2>
+  </div>
+  <div class="about-panel">
+    <div class="about-avatar"><img data-field="avatar" src="assets/avatar.svg" alt="Profile photo"></div>
+    <div>
+      <div class="about-name" data-field="name">Your Name</div>
+      <div class="about-role" data-field="role">Thumbnail Designer · Graphic Designer</div>
+      <p class="about-bio body-md" data-field="bio">Add a short bio here.</p>
+      <div class="about-tags" id="spec-tags"></div>
+    </div>
+  </div>
+</section>
+
+<section class="work dark-track" id="work">
+  <div class="section-head">
+    <span class="eyebrow">Selected work</span>
+    <h2 class="heading">Recent projects</h2>
+    <p>A few pieces I'm proud of — thumbnails, graphics, and colour work.</p>
+  </div>
+  <div class="work-grid" id="work-grid"></div>
+</section>
+
+<div class="light-track">
+  <section class="contact" id="contact">
+    <div class="section-head">
+      <span class="eyebrow">Get in touch</span>
+      <h2 class="heading">Let's work together</h2>
+      <p>Send a brief, a video title, or just say hello — I usually reply within a day.</p>
+    </div>
+    <div id="contact-featured"></div>
+    <div class="contact-row" id="contact-methods"></div>
+  </section>
+
+  <footer>
+    <div>© <span id="year"></span> <span data-field="name">Your Name</span>. Built for showcasing real work.</div>
+    <div class="footer-social" id="footer-social"></div>
+  </footer>
+</div>
+
+<script>
+(function(){
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  // ---- mobile nav toggle ----
+  var toggle = document.getElementById('nav-toggle');
+  var drawer = document.getElementById('nav-drawer');
+  toggle.addEventListener('click', function(){
+    var isOpen = drawer.classList.toggle('open');
+    toggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+  });
+  drawer.querySelectorAll('a').forEach(function(a){
+    a.addEventListener('click', function(){ drawer.classList.remove('open'); toggle.setAttribute('aria-expanded','false'); });
+  });
+
+  // ---- nav polarity flip over the light track ----
+  var nav = document.getElementById('site-nav');
+  var navCta = document.getElementById('nav-cta');
+  var lightTrack = document.querySelector('.light-track');
+  if('IntersectionObserver' in window && lightTrack){
+    var obs = new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        if(entry.isIntersecting){
+          nav.classList.add('light');
+          navCta.classList.remove('btn--outline-dark');
+          navCta.classList.add('btn--solid-light');
+        } else {
+          nav.classList.remove('light');
+          navCta.classList.remove('btn--solid-light');
+          navCta.classList.add('btn--outline-dark');
+        }
+      });
+    }, { rootMargin:'-72px 0px -85% 0px', threshold:0 });
+    obs.observe(lightTrack);
+  }
+
+  // ---- data loading & rendering ----
+  var FALLBACK_DATA = {
+    profile:{
+      name:"Your Name",
+      role:"Thumbnail Designer · Graphic Designer",
+      tagline:"Every frame graded, framed, and built to get the click.",
+      subline:"I design YouTube thumbnails, graphics, and colour-graded visuals for creators and brands who want their work to stop the scroll.",
+      bio:"Add a short bio here — how long you've been designing, the tools you use, and the kind of clients or channels you like working with most.",
+      specifications:["YouTube Thumbnails","Photo Retouching","Graphic Design","Colour Grading","Social Media Creatives","Branding & Logos"],
+      avatar:"assets/avatar.svg"
+    },
+    contact:{ whatsapp:"", linkedin:"", email:"", telegram:"", instagram:"" },
+    work:[
+      {id:"w1",title:"Add your first project",category:"Thumbnail",description:"Open admin.html and replace this with a real thumbnail or design you've shipped.",image:"assets/work/placeholder-1.svg",link:""},
+      {id:"w2",title:"Add your second project",category:"Graphic Design",description:"Upload an image, give it a title, and pick a category.",image:"assets/work/placeholder-2.svg",link:""},
+      {id:"w3",title:"Add your third project",category:"Colour Grading",description:"Your gallery can hold as many projects as you like — just keep adding.",image:"assets/work/placeholder-3.svg",link:""}
+    ]
+  };
+
+  function escapeHtml(str){
+    return String(str == null ? "" : str).replace(/[&<>"']/g, function(m){
+      return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m];
+    });
+  }
+
+  function buildContactHref(key, value){
+    if(!value) return null;
+    var v = String(value).trim();
+    if(!v) return null;
+    switch(key){
+      case 'whatsapp': return 'https://wa.me/' + v.replace(/[^0-9]/g,'');
+      case 'email': return 'mailto:' + v;
+      case 'linkedin': return /^https?:\/\//i.test(v) ? v : 'https://linkedin.com/in/' + v.replace(/^\/+/,'');
+      case 'telegram': return /^https?:\/\//i.test(v) ? v : 'https://t.me/' + v.replace(/^@/,'');
+      case 'instagram': return /^https?:\/\//i.test(v) ? v : 'https://instagram.com/' + v.replace(/^@/,'');
+      default: return null;
+    }
+  }
+
+  function render(data){
+    data = Object.assign({}, FALLBACK_DATA, data);
+    data.profile = Object.assign({}, FALLBACK_DATA.profile, data.profile);
+    data.contact = Object.assign({}, FALLBACK_DATA.contact, data.contact);
+
+    document.title = data.profile.name + ' — ' + data.profile.role;
+
+    document.querySelectorAll('[data-field="name"]').forEach(function(el){ el.textContent = data.profile.name; });
+    document.querySelectorAll('[data-field="role"]').forEach(function(el){ el.textContent = data.profile.role; });
+    document.querySelectorAll('[data-field="tagline"]').forEach(function(el){ el.textContent = data.profile.tagline; });
+    document.querySelectorAll('[data-field="subline"]').forEach(function(el){ el.textContent = data.profile.subline; });
+    document.querySelectorAll('[data-field="bio"]').forEach(function(el){ el.textContent = data.profile.bio; });
+    document.querySelectorAll('[data-field="avatar"]').forEach(function(el){
+      el.src = data.profile.avatar; el.alt = data.profile.name + ' profile photo';
+    });
+
+    var specWrap = document.getElementById('spec-tags');
+    specWrap.innerHTML = (data.profile.specifications || []).map(function(s){
+      return '<span class="tag-dark">' + escapeHtml(s) + '</span>';
+    }).join('');
+
+    var marquee = document.getElementById('marquee-track');
+    var specs = data.profile.specifications && data.profile.specifications.length ? data.profile.specifications : ['Add specifications in admin.html'];
+    var once = specs.map(function(s){ return '<span>' + escapeHtml(s) + '</span><span class="dot">•</span>'; }).join('');
+    marquee.innerHTML = once + once;
+
+    var grid = document.getElementById('work-grid');
+    if(data.work && data.work.length){
+      grid.innerHTML = data.work.map(function(item){
+        var inner =
+          '<div class="work-media"><img src="' + escapeHtml(item.image) + '" alt="' + escapeHtml(item.title) + '" loading="lazy"></div>' +
+          '<div class="work-caption">' +
+            '<span class="tag-dark small">' + escapeHtml(item.category || 'Project') + '</span>' +
+            '<h3>' + escapeHtml(item.title) + '</h3>' +
+            '<p>' + escapeHtml(item.description || '') + '</p>' +
+          '</div>';
+        return item.link
+          ? '<a class="work-card" href="' + escapeHtml(item.link) + '" target="_blank" rel="noopener">' + inner + '</a>'
+          : '<div class="work-card">' + inner + '</div>';
+      }).join('');
+    } else {
+      grid.innerHTML = '<div class="empty-state">No projects yet — open <code>admin.html</code> to add your first one.</div>';
+    }
+
+    var featuredWrap = document.getElementById('contact-featured');
+    var whatsappHref = buildContactHref('whatsapp', data.contact.whatsapp);
+    if(whatsappHref){
+      featuredWrap.innerHTML =
+        '<div class="contact-featured">' +
+          '<div><div class="cf-label">Fastest reply</div><div class="cf-value">WhatsApp</div></div>' +
+          '<a class="btn btn--aloe" href="' + whatsappHref + '" target="_blank" rel="noopener">Message on WhatsApp</a>' +
+        '</div>';
+    } else {
+      featuredWrap.innerHTML = '';
+    }
+
+    var methods = [
+      { key:'email', label:'Email', variant:'btn--solid-light' },
+      { key:'linkedin', label:'LinkedIn', variant:'btn--outline-light' },
+      { key:'telegram', label:'Telegram', variant:'btn--outline-light' },
+      { key:'instagram', label:'Instagram', variant:'btn--outline-light' }
+    ];
+    var methodsWrap = document.getElementById('contact-methods');
+    var rendered = methods.map(function(m){
+      var href = buildContactHref(m.key, data.contact[m.key]);
+      if(!href) return '';
+      var target = m.key === 'email' ? '' : ' target="_blank" rel="noopener"';
+      return '<a class="btn ' + m.variant + '" href="' + href + '"' + target + '>' + m.label + '</a>';
+    }).filter(Boolean).join('');
+
+    if(!rendered && !whatsappHref){
+      methodsWrap.innerHTML = '<p class="empty-state-light">Contact details coming soon — add them in admin.html.</p>';
+    } else {
+      methodsWrap.innerHTML = rendered;
+    }
+
+    var footerSocial = document.getElementById('footer-social');
+    var socialLinks = ['instagram','linkedin','telegram'].map(function(key){
+      var href = buildContactHref(key, data.contact[key]);
+      if(!href) return '';
+      var label = key.charAt(0).toUpperCase() + key.slice(1);
+      return '<a href="' + href + '" target="_blank" rel="noopener">' + label + '</a>';
+    }).filter(Boolean).join('');
+    footerSocial.innerHTML = socialLinks;
+
+    window.__portfolioData = data;
+    document.dispatchEvent(new CustomEvent('portfolio:rendered', { detail:data }));
+  }
+
+  fetch('data.json', { cache:'no-store' })
+    .then(function(res){ if(!res.ok) throw new Error('bad response'); return res.json(); })
+    .then(render)
+    .catch(function(err){ console.warn('Using fallback data (data.json not reachable):', err); render(FALLBACK_DATA); });
+})();
+</script>
+
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+    "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+  }
+}
+</script>
+<script type="module">
+import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
+import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
+import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
+
+function initParticleHero(){
+  var stage = document.getElementById('particle-stage');
+  if(!stage) return;
+  var prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if(prefersReducedMotion) return;
+
+  var width = stage.clientWidth, height = stage.clientHeight;
+  if(width === 0 || height === 0) return;
+
+  var renderer;
+  try{
+    renderer = new THREE.WebGLRenderer({ antialias:true, alpha:true, powerPreference:'high-performance' });
+  } catch(e){
+    console.warn('WebGL unavailable, skipping particle hero.', e);
+    return;
+  }
+  renderer.setSize(width, height);
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+  stage.appendChild(renderer.domElement);
+
+  var scene = new THREE.Scene();
+  var camera = new THREE.PerspectiveCamera(50, width/height, 0.1, 2000);
+  camera.position.set(0, 5, 92);
+
+  var controls = new OrbitControls(camera, renderer.domElement);
+  controls.enableDamping = true;
+  controls.enableZoom = false;
+  controls.enablePan = false;
+  controls.autoRotate = true;
+  controls.autoRotateSpeed = 1.1;
+
+  var composer = new EffectComposer(renderer);
+  composer.addPass(new RenderPass(scene, camera));
+  var bloomPass = new UnrealBloomPass(new THREE.Vector2(width, height), 1.3, 0.4, 0.86);
+  composer.addPass(bloomPass);
+
+  var COUNT = Math.min(6000, Math.max(1200, Math.round((width*height)/100)));
+  var gridSide = Math.ceil(Math.pow(COUNT, 1/3));
+  var spacing = 2.7;
+  var offset = (gridSide * spacing) / 2;
+
+  var geometry = new THREE.TetrahedronGeometry(0.34);
+  var material = new THREE.MeshBasicMaterial({ color: 0xffffff });
+  var mesh = new THREE.InstancedMesh(geometry, material, COUNT);
+  mesh.instanceMatrix.setUsage(THREE.DynamicDrawUsage);
+  scene.add(mesh);
+
+  var dummy = new THREE.Object3D();
+  var scatterColor = new THREE.Color('#71717a');
+  var settleColor = new THREE.Color('#ffffff');
+  var workingColor = new THREE.Color();
+
+  var positions = [];
+  var targets = [];
+  for(var i=0;i<COUNT;i++){
+    positions.push(new THREE.Vector3(
+      (Math.random()-0.5)*110,
+      (Math.random()-0.5)*110,
+      (Math.random()-0.5)*110
+    ));
+    var z = Math.floor(i/(gridSide*gridSide));
+    var y = Math.floor((i % (gridSide*gridSide))/gridSide);
+    var x = i % gridSide;
+    targets.push(new THREE.Vector3(x*spacing-offset, y*spacing-offset, z*spacing-offset));
+    mesh.setColorAt(i, scatterColor);
+  }
+
+  var frameId = null;
+
+  function frame(){
+    frameId = requestAnimationFrame(frame);
+    controls.update();
+
+    for(var i=0;i<COUNT;i++){
+      positions[i].lerp(targets[i], 0.06);
+      dummy.position.copy(positions[i]);
+      dummy.updateMatrix();
+      mesh.setMatrixAt(i, dummy.matrix);
+
+      var dist = positions[i].distanceTo(targets[i]);
+      var settle = 1 - Math.min(dist/45, 1);
+      workingColor.copy(scatterColor).lerp(settleColor, settle);
+      mesh.setColorAt(i, workingColor);
+    }
+    mesh.instanceMatrix.needsUpdate = true;
+    mesh.instanceColor.needsUpdate = true;
+
+    composer.render();
+  }
+  frame();
+
+  if('ResizeObserver' in window){
+    var ro = new ResizeObserver(function(entries){
+      entries.forEach(function(entry){
+        var w = entry.contentRect.width, h = entry.contentRect.height;
+        if(w === 0 || h === 0) return;
+        camera.aspect = w/h;
+        camera.updateProjectionMatrix();
+        renderer.setSize(w,h);
+        composer.setSize(w,h);
+      });
+    });
+    ro.observe(stage);
+  }
+
+  document.addEventListener('visibilitychange', function(){
+    if(document.hidden){ if(frameId) cancelAnimationFrame(frameId); frameId = null; }
+    else if(frameId === null){ frame(); }
+  });
+}
+
+try{ initParticleHero(); } catch(e){ console.warn('Particle hero failed to initialise.', e); }
+</script>
+
+</body>
+</html>
