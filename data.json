@@ -1,51 +1,64 @@
 {
   "profile": {
-    "name": "Your Name",
+    "name": "Prem Chaudhary",
     "role": "Thumbnail Designer · Graphic Designer",
-    "tagline": "Every frame graded, framed, and built to get the click.",
-    "subline": "I design YouTube thumbnails, graphics, and colour-graded visuals for creators and brands who want their work to stop the scroll.",
-    "bio": "Add a short bio here — how long you've been designing, the tools you use, and the kind of clients or channels you like working with most.",
+    "tagline": "Turning ideas into visuals that stop the scroll.",
+    "subline": "I create click-worthy thumbnails, bold graphics, and polished visuals designed to capture attention and make every frame count.",
+    "bio": "I’m Prem Chaudhary, a creative designer focused on turning simple ideas into eye-catching visuals. From YouTube thumbnails and graphic design to photo retouching and colour grading, I create work that helps creators and brands stand out in a crowded digital world.",
     "specifications": [
-      "YouTube Thumbnails",
-      "Photo Retouching",
-      "Graphic Design",
-      "Colour Grading",
-      "Social Media Creatives",
-      "Branding & Logos"
+      "🖼️ YouTube Thumbnail Design",
+      "🎨 Graphic Design",
+      "✨ Photo Retouching",
+      "🎬 Colour Grading",
+      "📱 Social Media Creatives",
+      "📢 Poster Design",
+      "💎 Brand Visuals"
     ],
-    "avatar": "assets/avatar.svg"
+    "avatar": "assets/avatar.jpg"
   },
   "contact": {
-    "whatsapp": "",
-    "linkedin": "",
-    "email": "",
-    "telegram": "",
-    "instagram": ""
+    "whatsapp": "91+ 8707278255",
+    "email": "chaudharyprem2481@gmail.com",
+    "linkedin": "https://www.linkedin.com/in/prem-chaudhary-1a55b7414/?lipi=urn%3Ali%3Apage%3Ad_flagship3_profile_view_base_contact_details%3BgHZDBnI6R%2BCywEnBnxCzdw%3D%3D",
+    "telegram": "premchaudhary24",
+    "instagram": "prem.designer248"
   },
   "work": [
     {
       "id": "w1",
-      "title": "Add your first project",
+      "title": "Gaming thumnails",
       "category": "Thumbnail",
-      "description": "Open admin.html and replace this with a real thumbnail or design you've shipped.",
-      "image": "assets/work/placeholder-1.svg",
-      "link": ""
+      "description": "",
+      "link": "",
+      "image": "assets/work/w1.jpg",
+      "_previewUrl": "blob:https://chaudharyprem2481-glitch.github.io/4e5ad5f7-b51e-4e39-ace9-980c48428220"
     },
     {
       "id": "w2",
-      "title": "Add your second project",
+      "title": "Unleash The beast",
       "category": "Graphic Design",
-      "description": "Upload an image, give it a title, and pick a category.",
-      "image": "assets/work/placeholder-2.svg",
-      "link": ""
+      "description": "",
+      "link": "",
+      "image": "assets/work/w2.jpg",
+      "_previewUrl": "blob:https://chaudharyprem2481-glitch.github.io/4675addc-a6f2-49e1-bc2a-db299225d479"
     },
     {
       "id": "w3",
-      "title": "Add your third project",
+      "title": "Every colour tells a story",
       "category": "Colour Grading",
-      "description": "Your gallery can hold as many projects as you like — just keep adding.",
-      "image": "assets/work/placeholder-3.svg",
-      "link": ""
+      "description": "",
+      "link": "",
+      "image": "assets/work/w3.png",
+      "_previewUrl": "blob:https://chaudharyprem2481-glitch.github.io/4a5337f3-54c8-4c26-b533-acf9cd49ab4b"
+    },
+    {
+      "id": "wmrhnvk4bwv7z3",
+      "title": "Grow with us",
+      "category": "Poster Design",
+      "description": "",
+      "link": "",
+      "image": "assets/work/wmrhnvk4bwv7z3.png",
+      "_previewUrl": "blob:https://chaudharyprem2481-glitch.github.io/b54c5990-8798-4dda-8a96-8b75d8260307"
     }
   ]
 }
